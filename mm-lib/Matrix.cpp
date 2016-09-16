@@ -8,6 +8,33 @@
 Matrix::Matrix()
 {
 }
+double Matrix::operator() (int row, int col) const
+{
+	return mat[row][col];
+}
+
+bool operator==(const Matrix &a, const Matrix &b)
+{
+	if (a.rows == b.rows
+		&& (a.columns == b.columns))
+
+	{
+		for (int i = 0; i < a.rows; i++)
+		{
+			for (int j = 0; j < a.columns; j++)
+			{
+				if (a(i,j) != b(i,j))
+					return false;
+			}
+		}
+		return true;
+	}
+}
+
+bool operator!=(const Matrix &a, const Matrix &b)
+{
+	return !operator==(a, b);
+}
 
 void Matrix::print()
 {
@@ -37,7 +64,7 @@ Matrix Matrix::operator+(Matrix &b)
 		{
 			for (int j = 0; j < b.columns; j++)
 			{
-				c.getMat()[i][j] += this->getMat()[i][j];
+				c.mat[i][j] += this->mat[i][j];
 			}
 		}
 		return c;
@@ -62,7 +89,7 @@ Matrix Matrix::operator*(Matrix &b)
 				result[i][j] = 0;
 				for (int k = 0; k < this->columns; k++)
 				{
-					result[i][j] += this->getMat()[i][k] * b.getMat()[k][j];
+					result[i][j] += this->operator()(i,k) * b(k,j);
 				}
 			}
 		}
@@ -91,9 +118,7 @@ Matrix::Matrix(std::vector<double> &data, int rows, int cols)
 	}
 }
 
-double** Matrix::getMat(){
-	return this->mat;
-}
+ 
 
 Matrix::~Matrix()
 {
