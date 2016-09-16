@@ -9,7 +9,7 @@ TEST(testMatrix, matrixTest1)
 {
 	char *filename;
 	int nrow1, ncol1, nrow2, ncol2;
-	filename = "D:\\Stdy\\mm\\mm-app\\mm-app\\input.txt";
+	filename = "D:\\Stdy\\mm\\mm-app\\mm-lib\\input.txt";
 	std::ifstream file;
 	std::string line;
 	file.open(filename);
