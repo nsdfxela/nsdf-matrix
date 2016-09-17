@@ -118,7 +118,80 @@ Matrix::Matrix(std::vector<double> &data, int rows, int cols)
 	}
 }
 
- 
+int Matrix::det()
+{
+	return 0;
+}
+
+bool Matrix::isSquare()
+{
+	return (rows == columns);
+}
+
+void Matrix::rowsSwap(int a, int b)
+{
+	if (a == b)
+		return;
+
+	double* buf = mat[a];
+	mat[a] = mat[b];
+	mat[b] = buf;
+}
+
+double* Matrix::rowAddition(int a, int withB)
+{
+	return rowAddition(a, mat[withB]);
+}
+
+double* Matrix::rowAddition(int a, double* row)
+{
+	double* result = new double[columns];
+	std::copy(mat[a], mat[a] + columns, result);
+	for (int i = 0; i < columns; i++)
+	{
+		result[i] += row[i];
+	}
+	return result;
+}
+
+double* Matrix::rowMultConstant(int a, double c)
+{
+	double* result = new double[columns];
+	std::copy(mat[a], mat[a]+columns, result);
+	for (int i = 0; i < columns; i++)
+	{
+		result[i] *= c;
+	}
+	return result;
+}
+
+void Matrix::gauss()
+{
+	if (!isSquare()){
+		throw;
+	}
+
+	double coeff = 0.0;
+	for (int k = 0; k < columns-1; k++)
+	{
+			for (int j = k; j < rows; j++)
+			{
+				if (mat[j][k] != 0)
+				{
+					rowsSwap(j, k);
+					break;
+				}
+			}
+			
+			for (int j = k+1; j < rows; j++)
+			{
+				coeff = mat[j][k] / mat[k][k];
+				double* newRow = rowMultConstant(k, -coeff);
+				mat[j] = rowAddition(j, newRow);
+			}
+			std::cout << std::endl;
+	} 
+}
 
 Matrix::~Matrix()
 {
