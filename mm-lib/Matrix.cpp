@@ -5,6 +5,19 @@
 #include <string>
 #include <vector>
 
+#define CONSTRUCT(list, r, c) \
+	this->rows = r; \
+	this->columns = c; \
+	mat = new double*[rows]; \
+for (int i = 0; i < rows; i++) \
+{ \
+	mat[i] = new double[cols]; \
+for (int j = 0; j < cols; j++) \
+	{ \
+	mat[i][j] = data[i*cols + j]; \
+	} \
+} \
+
 Matrix::Matrix()
 {
 }
@@ -23,7 +36,7 @@ bool operator==(const Matrix &a, const Matrix &b)
 		{
 			for (int j = 0; j < a.columns; j++)
 			{
-				if (a(i,j) != b(i,j))
+				if (a(i, j) != b(i, j))
 					return false;
 			}
 		}
@@ -43,7 +56,7 @@ void Matrix::print()
 	{
 		for (int j = 0; j < columns; j++)
 		{
-			
+
 			sprintf(print_buffer, "%f ", mat[i][j]);
 			std::cout << print_buffer;
 		}
@@ -89,7 +102,7 @@ Matrix Matrix::operator*(Matrix &b)
 				result[i][j] = 0;
 				for (int k = 0; k < this->columns; k++)
 				{
-					result[i][j] += this->operator()(i,k) * b(k,j);
+					result[i][j] += this->operator()(i, k) * b(k, j);
 				}
 			}
 		}
@@ -102,31 +115,14 @@ Matrix Matrix::operator*(Matrix &b)
 
 }
 
-Matrix::Matrix(std::vector<double> &data, int rows, int cols)
-{
-	this->rows = rows;
-	this->columns = cols;
-
-	mat = new double*[rows];
-	for (int i = 0; i < rows; i++)
-	{
-		mat[i] = new double[cols];
-		for (int j = 0; j < cols; j++)
-		{
-			mat[i][j] = data[i*cols + j];
-		}
-	}
-}
-
 double Matrix::det()
 {
 	Matrix copy(*this);
 	double d = copy.gauss();
-	copy.print();
 	double result = 1.0;
 	for (int i = 0; i < rows; i++)
-		result *= copy(i,i);
-	return result/d;
+		result *= copy(i, i);
+	return result / d;
 }
 
 bool Matrix::isSquare()
@@ -163,7 +159,7 @@ double* Matrix::rowAddition(int a, double* row)
 double* Matrix::rowMultConstant(int a, double c)
 {
 	double* result = new double[columns];
-	std::copy(mat[a], mat[a]+columns, result);
+	std::copy(mat[a], mat[a] + columns, result);
 	for (int i = 0; i < columns; i++)
 	{
 		result[i] *= c;
@@ -178,26 +174,43 @@ double Matrix::gauss()
 	}
 	double detMultiplier = 1.0;
 	double coeff = 0.0;
-	for (int k = 0; k < columns-1; k++)
+	for (int k = 0; k < columns - 1; k++)
 	{
-			for (int j = k; j < rows; j++)
+		for (int j = k; j < rows; j++)
+		{
+			if (mat[j][k] != 0)
 			{
-				if (mat[j][k] != 0)
-				{
-					rowsSwap(j, k);
-					detMultiplier *= -1;
-					break;
-				}
+				rowsSwap(j, k);
+				detMultiplier *= -1;
+				break;
 			}
-			
-			for (int j = k+1; j < rows; j++)
-			{
-				coeff = mat[j][k] / mat[k][k];
-				double* newRow = rowMultConstant(k, -coeff);
-				mat[j] = rowAddition(j, newRow);
-			}
+		}
+
+		for (int j = k + 1; j < rows; j++)
+		{
+			coeff = mat[j][k] / mat[k][k];
+			double* newRow = rowMultConstant(k, -coeff);
+			mat[j] = rowAddition(j, newRow);
+		}
 	}
 	return detMultiplier;
+}
+
+Matrix Matrix::inv()
+{
+	Matrix mtrx(*this);
+
+	return mtrx;
+}
+
+Matrix::Matrix(const double *data, int rows, int cols)
+{
+	CONSTRUCT(data, rows, cols)
+}
+
+Matrix::Matrix(std::vector<double> &data, int rows, int cols)
+{
+	CONSTRUCT(data, rows, cols)
 }
 
 Matrix::~Matrix()
