@@ -155,6 +155,36 @@ TEST(testMatrix, gauss2)
 	ASSERT_EQ(A, B);
 }
 
+TEST(testMatrix, det)
+{
+	static const double Adata[] =
+	{ 2.0, 1.0, 1.0,
+	4.0, -6.0, 0.0,
+	-2.0, 7.0, 2.0 };
+	std::vector<double> Avec(Adata, Adata + sizeof(Adata) / sizeof(Adata[0]));
+	
+	Matrix A(Avec, 3, 3);
+	double det = A.det();
+	ASSERT_EQ(det, -16.0);
+}
+
+TEST(testMatrix, det2)
+{
+	static const double Adata[] =
+	{ 0.440981766, 0.2256360, 0.65062182, 0.27429142, 0.6668476, 0.34110213, 0.6688382,
+	0.053314246, 0.9509703, 0.08845699, 0.09599700, 0.2119761, 0.82880369, 0.8542271,
+	0.005385053, 0.7820807, 0.27225012, 0.87603066, 0.9346250, 0.59914844, 0.4868032,
+	0.902596908, 0.2991466, 0.84494488, 0.46673596, 0.3066095, 0.79195919, 0.3077258,
+	0.874406090, 0.4678755, 0.07489958, 0.90506278, 0.3073542, 0.03876189, 0.7682957,
+	0.614470835, 0.7843640, 0.50044150, 0.01084699, 0.0342375, 0.86218561, 0.6975900,
+	0.836206900, 0.3609330, 0.55240323, 0.58422357, 0.1840902, 0.61532534, 0.9894036, };
+
+	std::vector<double> Avec(Adata, Adata + sizeof(Adata) / sizeof(Adata[0]));
+	Matrix A(Avec, 7, 7);
+	double determinant = A.det();
+	EXPECT_FLOAT_EQ(determinant, -0.02500575);
+
+}
 
 TEST(testMatrix, isNotSquare)
 {

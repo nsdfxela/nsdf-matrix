@@ -9,9 +9,9 @@ public:
 	Matrix(std::vector<double> &data, int rows, int cols);
 	~Matrix();
 	Matrix operator+(Matrix &b);
-	int det();
+	double det();
 	bool isSquare();
-	void gauss();
+	double gauss();
 	//Elementary transformations
 	void rowsSwap(int a, int b);
 	double* rowMultConstant(int a, double c);

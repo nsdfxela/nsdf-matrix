@@ -118,9 +118,15 @@ Matrix::Matrix(std::vector<double> &data, int rows, int cols)
 	}
 }
 
-int Matrix::det()
+double Matrix::det()
 {
-	return 0;
+	Matrix copy(*this);
+	double d = copy.gauss();
+	copy.print();
+	double result = 1.0;
+	for (int i = 0; i < rows; i++)
+		result *= copy(i,i);
+	return result/d;
 }
 
 bool Matrix::isSquare()
@@ -165,12 +171,12 @@ double* Matrix::rowMultConstant(int a, double c)
 	return result;
 }
 
-void Matrix::gauss()
+double Matrix::gauss()
 {
 	if (!isSquare()){
 		throw;
 	}
-
+	double detMultiplier = 1.0;
 	double coeff = 0.0;
 	for (int k = 0; k < columns-1; k++)
 	{
@@ -179,6 +185,7 @@ void Matrix::gauss()
 				if (mat[j][k] != 0)
 				{
 					rowsSwap(j, k);
+					detMultiplier *= -1;
 					break;
 				}
 			}
@@ -189,8 +196,8 @@ void Matrix::gauss()
 				double* newRow = rowMultConstant(k, -coeff);
 				mat[j] = rowAddition(j, newRow);
 			}
-			std::cout << std::endl;
-	} 
+	}
+	return detMultiplier;
 }
 
 Matrix::~Matrix()
