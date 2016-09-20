@@ -14,6 +14,8 @@ public:
 	bool isSquare();
 	double gauss();
 	Matrix inv();
+	Matrix cbind(Matrix &b);
+	static Matrix createIdentity(int rows);
 	//Elementary transformations
 	void rowsSwap(int a, int b);
 	double* rowMultConstant(int a, double c);
@@ -25,6 +27,7 @@ public:
 	Matrix operator+(Matrix &b);
 	double operator() (int row, int col	) const;
 	Matrix operator*(Matrix &b);
+	
 	void print();
 };
 

@@ -167,11 +167,46 @@ double* Matrix::rowMultConstant(int a, double c)
 	return result;
 }
 
+Matrix Matrix::cbind(Matrix &b)
+{
+	
+	double **data;
+	data = new double*[rows];
+	for (int i = 0; i < rows; i++)
+	{
+		data[i] = new double[columns + b.columns];
+		std::copy(this->mat[i], (this->mat[i] + columns ), data[i]);
+		std::copy(b.mat[i], (b.mat[i] + b.columns ), (data[i] + columns));
+	}
+	Matrix res;
+	res.mat = data;
+	res.rows = rows;
+	res.columns = columns + b.columns;
+	return res;
+}
+
+Matrix Matrix::createIdentity(int rows)
+{
+	Matrix res;
+	res.rows = rows;
+	res.columns = rows;
+	res.mat = new double*[rows];
+	for (int i = 0; i < rows; i++){
+		res.mat[i] = new double[rows];
+		for (int j = 0; j < rows; j++)
+		{
+			i == j ? res.mat[i][j] = 1.0 : res.mat[i][j] = 0;
+		}
+	}
+	return res;
+}
+
 double Matrix::gauss()
 {
-	if (!isSquare()){
+	/*if (!isSquare()){
 		throw;
-	}
+	}*/
+
 	double detMultiplier = 1.0;
 	double coeff = 0.0;
 	for (int k = 0; k < columns - 1; k++)
