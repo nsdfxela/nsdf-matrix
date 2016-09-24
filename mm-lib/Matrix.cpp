@@ -231,11 +231,40 @@ double Matrix::gauss()
 	return detMultiplier;
 }
 
+double Matrix::gaussJordan()
+{
+	double detMultiplier = gauss();
+	double coeff = 0.0;
+	int col = 0;
+	for (int i = rows-1; i >= 0; i--)
+	{ 
+		for (int j = i-1; j >= 0; j--)
+		{
+			coeff = mat[j][i] / mat[i][i];
+			double* newRow = rowMultConstant(i, -coeff);
+			mat[j] = rowAddition(j, newRow);
+			detMultiplier *= (coeff);
+		}
+		mat[i] = rowMultConstant(i, 1 / mat[i][i]);
+		detMultiplier *= (mat[i][i]);
+	}
+	return detMultiplier;
+}
+
 Matrix Matrix::inv()
 {
 	Matrix mtrx(*this);
+	Matrix I = createIdentity(mtrx.rows);
+	Matrix AI = mtrx.cbind(I);
+	AI.gaussJordan();
+	Matrix A(new double[mtrx.rows*mtrx.columns], mtrx.rows, mtrx.columns);
+	
 
-	return mtrx;
+	for (int i = 0; i < A.rows; i++){
+		std::copy(AI.mat[i] + mtrx.columns, AI.mat[i] + AI.columns, A.mat[i]);
+	}
+	A.print();
+	return A;
 }
 
 Matrix::Matrix(const double *data, int rows, int cols)

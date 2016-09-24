@@ -155,6 +155,29 @@ TEST(testMatrix, gauss2)
 	ASSERT_EQ(A, B);
 }
 
+TEST(testMatrix, gauss3)
+{
+	static const double Adata[] = 
+	{ 3.0, 0.0,  2.0, 1.0, 0.0, 0.0,
+	  2.0, 0.0, -2.0, 0.0, 1.0, 0.0,
+	  0.0, 1.0, 1.0, 0.0, 0.0, 1.0, };
+	std::vector<double> Avec(Adata, Adata + sizeof(Adata) / sizeof(Adata[0]));
+	static const double Bdata[] =
+	{ 1.0, 0.0, 0.0, 0.2, 0.2, 0.0,
+	  0.0, 1.0, 0.0,-0.2, 0.3, 1.0,
+	  0.0, 0.0, 1.0, 0.2,-0.3, 0.0 };
+	std::vector<double> Bvec(Bdata, Bdata + sizeof(Adata) / sizeof(Bdata[0]));
+	Matrix A(Avec, 3, 6);
+	Matrix B(Bvec, 3, 6);
+	A.gaussJordan();
+
+	for (int i = 0; i < A.rows; i++)
+	for (int j = 0; j < A.columns; j++)
+	{
+		EXPECT_FLOAT_EQ(A(i, j), B(i, j));
+	}
+}
+
 TEST(testMatrix, det)
 {
 	static const double Adata[] =
@@ -325,13 +348,32 @@ TEST(testMatrix, inversion)
 		-0.002459896, 0.9317469, 2.0442862, 1.0833719, -1.4506776, -3.453528, 2.7639341, -2.4767745,
 		 0.574490158, 0.5498574, -0.9249098, -1.0544927, -0.7042295, 1.688502, -0.7289013, 1.3464922 };
 
-	Matrix A(Adata, 10, 10);
-	Matrix Ainv(AinvData, 10, 10);
-	/*Matrix B = A.inv();
-	for (int i = 0; i < 10; i++)
-	for (int j = 0; j < 10; j++)
+	Matrix A(Adata, 8, 8);
+	Matrix Ainv(AinvData, 8, 8);
+	Matrix B = A.inv();
+	for (int i = 0; i < 8; i++)
+	for (int j = 0; j < 8; j++)
+	{ 
+		EXPECT_DOUBLE_EQ(Ainv(i, j), B(i, j));
+	}
+	
+}
+
+TEST(testMatrix, inversion2)
+{
+
+	static const double Adata[] = { 3.0, 0.0, 2.0, 2.0, 0.0, -2.0, 0.0, 1.0, -1.0  };
+	static const double AinvData[] = { 0.2, 0.2, 0.0, 0.2, -0.3, 1.0, 0.2, -0.3, 0.0  };
+
+	
+	Matrix A(Adata, 3, 3);
+	Matrix Ainv(AinvData, 3, 3);
+	Matrix B = A.inv();
+
+	for (int i = 0; i < 3; i++)
+	for (int j = 0; j < 3; j++)
 	{
 		EXPECT_DOUBLE_EQ(Ainv(i, j), B(i, j));
 	}
-	*/
+
 }

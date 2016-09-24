@@ -13,6 +13,7 @@ public:
 	double det();
 	bool isSquare();
 	double gauss();
+	double gaussJordan();
 	Matrix inv();
 	Matrix cbind(Matrix &b);
 	static Matrix createIdentity(int rows);
