@@ -12,11 +12,14 @@ public:
 	
 	double det();
 	bool isSquare();
-	double gauss();
-	double gaussJordan();
+	//new mat generation
 	Matrix inv();
 	Matrix cbind(Matrix &b);
 	static Matrix createIdentity(int rows);
+	//elimination
+	double gauss();
+	double gaussJordan();
+	void luDecomposition(Matrix &l, Matrix &u);
 	//Elementary transformations
 	void rowsSwap(int a, int b);
 	double* rowMultConstant(int a, double c);

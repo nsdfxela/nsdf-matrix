@@ -42,6 +42,7 @@ bool operator==(const Matrix &a, const Matrix &b)
 		}
 		return true;
 	}
+	else return false;
 }
 
 bool operator!=(const Matrix &a, const Matrix &b)
@@ -259,12 +260,15 @@ Matrix Matrix::inv()
 	AI.gaussJordan();
 	Matrix A(new double[mtrx.rows*mtrx.columns], mtrx.rows, mtrx.columns);
 	
-
 	for (int i = 0; i < A.rows; i++){
 		std::copy(AI.mat[i] + mtrx.columns, AI.mat[i] + AI.columns, A.mat[i]);
 	}
-	A.print();
 	return A;
+}
+
+void Matrix::luDecomposition(Matrix &l, Matrix &u)
+{
+
 }
 
 Matrix::Matrix(const double *data, int rows, int cols)
