@@ -21,6 +21,20 @@ for (int j = 0; j < cols; j++) \
 Matrix::Matrix()
 {
 }
+
+Matrix::Matrix(const Matrix &origin)
+{
+	rows = origin.rows;
+	columns = origin.columns;
+
+	mat = new double*[rows];
+	for (int i = 0; i < rows; i++)
+	{
+		mat[i] = new double[columns];
+		std::copy(origin.mat[i], origin.mat[i] + origin.columns, mat[i]);
+	}
+}
+
 double Matrix::operator() (int row, int col) const
 {
 	return mat[row][col];
@@ -63,6 +77,7 @@ void Matrix::print()
 		}
 		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 Matrix Matrix::operator+(Matrix &b)
@@ -268,7 +283,25 @@ Matrix Matrix::inv()
 
 void Matrix::luDecomposition(Matrix &l, Matrix &u)
 {
+	double detMultiplier = 1.0;
+	double coeff = 0.0;
+	u = Matrix(*this);
+	l = Matrix(*this);
+	for (int k = 0; k < columns - 1; k++)
+	{
+		u.print();
+		for (int j = k + 1; j < rows; j++)
+		{
+			coeff = u.mat[j][k] / u.mat[k][k];
+			double* newRow = rowMultConstant(k, -coeff);
+			u.mat[j] = rowAddition(j, newRow);
+			l.mat[j][k] = 0.0;
+		}
+	}
 
+	u.print();
+	l.print();
+	
 }
 
 Matrix::Matrix(const double *data, int rows, int cols)

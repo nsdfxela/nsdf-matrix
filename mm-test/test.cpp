@@ -392,7 +392,6 @@ TEST(testMatrix, inversion2)
 	{
 		EXPECT_DOUBLE_EQ(Ainv(i, j), B(i, j));
 	}
-
 }
 
 TEST(testMatrix, inversion3)
@@ -438,4 +437,21 @@ TEST(testMatrix, LuDecomposition)
 	A.luDecomposition(L, U);
 	ASSERT_EQ(L, Lact);
 	ASSERT_EQ(U, Uact);
+}
+
+TEST(testMatrix, copy)
+{
+	static const double Adata[] =
+	{ 0.8980004, 0.4010613, 0.5180351, 0.7272678,
+	0.4415804, 0.8861460, 0.5045871, 0.0538957,
+	0.8736015, 0.8579659, 0.5867967, 0.2066557,
+	0.6862572, 0.9772443, 0.1352032, 0.2033192 };
+
+	Matrix A(Adata, 4, 4);
+	Matrix B = Matrix(A);
+
+	ASSERT_EQ(A.rows, B.rows);
+	ASSERT_EQ(A.columns, B.columns);
+	ASSERT_NE( memcmp(&A, &B, sizeof(A)), 0);
+	ASSERT_EQ( memcmp(&A, &A, sizeof(A)), 0);
 }
