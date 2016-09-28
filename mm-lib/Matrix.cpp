@@ -35,6 +35,21 @@ Matrix::Matrix(const Matrix &origin)
 	}
 }
 
+Matrix::Matrix(int rnum, int cnum)
+{
+	this->rows = rnum;
+	this->columns = cnum;
+	mat = new double*[rnum];
+	for (int i = 0; i < rnum; i++)
+	{
+		mat[i] = new double[cnum];
+		for (int j = 0; j < cnum; j++)
+		{
+			mat[i][j] = 0.0;
+		}
+	}
+}
+
 double Matrix::operator() (int row, int col) const
 {
 	return mat[row][col];
@@ -286,22 +301,19 @@ void Matrix::luDecomposition(Matrix &l, Matrix &u)
 	double detMultiplier = 1.0;
 	double coeff = 0.0;
 	u = Matrix(*this);
-	l = Matrix(*this);
+	l = Matrix(u.rows, u.columns);
 	for (int k = 0; k < columns - 1; k++)
 	{
-		u.print();
 		for (int j = k + 1; j < rows; j++)
 		{
 			coeff = u.mat[j][k] / u.mat[k][k];
-			double* newRow = rowMultConstant(k, -coeff);
-			u.mat[j] = rowAddition(j, newRow);
-			l.mat[j][k] = 0.0;
+			double* newRow = u.rowMultConstant(k, -coeff);
+			u.mat[j] = u.rowAddition(j, newRow);
+			l.mat[j][k] = coeff;
 		}
+		l.mat[k][k] = 1.0;
 	}
-
-	u.print();
-	l.print();
-	
+	l.mat[columns - 1][columns - 1] = 1.0;
 }
 
 Matrix::Matrix(const double *data, int rows, int cols)

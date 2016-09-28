@@ -410,8 +410,8 @@ TEST(testMatrix, inversion3)
 
 TEST(testMatrix, LuDecomposition)
 {
+	//LU-Decomposition is not unique!
 	//A
-
 	static const double Adata[] = { 0.8321464, 0.4517311, 0.94050152, 0.7128025,
 		0.1524349, 0.8792674, 0.05229075, 0.9454602,
 		0.7596947, 0.3211212, 0.51742229, 0.2835891,
@@ -435,8 +435,15 @@ TEST(testMatrix, LuDecomposition)
 	Matrix Uact(Udata, 4, 4);
 	Matrix L, U;
 	A.luDecomposition(L, U);
-	ASSERT_EQ(L, Lact);
-	ASSERT_EQ(U, Uact);
+	Matrix LuResult = L*U;
+	L.print();
+	U.print();
+
+	for (int i = 0; i < 4; i++){
+		for (int j = 0; j < 4; j++){
+			EXPECT_DOUBLE_EQ (LuResult(i, j), A(i,j));
+		}
+	}
 }
 
 TEST(testMatrix, copy)

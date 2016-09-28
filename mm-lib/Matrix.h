@@ -11,6 +11,7 @@ public:
 	Matrix();
 	Matrix(const double *data, int rows, int cols);
 	Matrix(std::vector<double> &data, int rows, int cols);
+	Matrix(int rnum, int cnum);
 	~Matrix();
 	
 	double det();
